@@ -53,6 +53,7 @@ var proxy = function(option){
 	 */
 	var replaceRule = function(req, res, cb){
 		var href = url.parse(req.url).href;
+        console.log('Path: ' + href);
 		var rules = option.rules;
 		cb(null, regxRules(rules, href), req, res);
 	};
