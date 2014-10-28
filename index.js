@@ -1,7 +1,8 @@
 var url = require('url');
 var async = require('async');
 
-var http = require('./lib/http');
+var http = require('http');
+
 var reply = require('./lib/reply');
 var replaceStatic = require('./lib/replaceStatic');
 /**
@@ -18,9 +19,13 @@ var replaceStatic = require('./lib/replaceStatic');
  */
 var proxy = function(option){
 
-	var init = function(cb){
-		http(cb, option);
-	};
+    function start(cb){
+        http.createServer(function(req, res){
+            cb(null, req, res);
+        }).listen(option.port || 80);
+        console.log("Server has started.port:" + option.port);
+    }
+
 	/**
 	 * 替换规则模块
 	 * @param rules
@@ -47,12 +52,13 @@ var proxy = function(option){
 	 * @param res
 	 */
 	var replaceRule = function(req, res, cb){
-		var href = url.parse(req).href;
+		var href = url.parse(req.url).href;
 		var rules = option.rules;
-		cb(regxRules(rules, href), req, res);
+		cb(null, regxRules(rules, href), req, res);
 	};
 
 	var middle = function(dest, req, res, cb){
+        console.log('start replace');
 		if(dest){
 			replaceStatic(dest, res, cb);
 			return;
@@ -60,6 +66,10 @@ var proxy = function(option){
 		reply(req, res, http, option, cb);
 	};
 
-	async.waterfall([init, replaceRule, middle]);
+
+    var end = function(){
+
+    }
+	async.waterfall([start, replaceRule, middle, end]);
 };
 module.exports = proxy;
