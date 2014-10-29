@@ -1,0 +1,27 @@
+#!/usr/bin/env node
+
+'use strict';
+var fs = require('fs');
+var path = require('path');
+var join = path.join;
+
+var version = require('../package.json').version;
+var proxy = require('./index.js');
+
+var optimist = require('optimist').alias({
+	'a': 'add',
+	'v': 'version'
+}).boolean(['v', 'h']);
+
+var cmds = optimist.argv;
+var firstCmd = cmds._.splice(0, 1).toString();
+
+if(!firstCmd){
+	if(cmds.v){
+		console.log(version);
+		return;
+	}
+}
+
+var conf = fs.readFileSync(process.cwd(), 'utf-8');
+proxy(conf);

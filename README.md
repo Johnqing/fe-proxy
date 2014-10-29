@@ -1,6 +1,12 @@
 资源文件反向代理
 ========
 
+## download
+
+```
+[sudo] npm install fe-proxy [-g]
+```
+
 ## HOSTS
 
 ```
@@ -22,4 +28,10 @@ proxy({
 	]
 });
 
+```
+
+## 命令行
+
+```
+feproxy config.json
 ```
