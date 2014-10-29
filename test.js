@@ -4,8 +4,8 @@ proxy({
     port: 80,
 	rules: [
 		{
-			r: /\/build\/*/g,
-			d: './src/'
+			r: /\/js\//,
+			d: './test/****'
 		}
 	]
 });

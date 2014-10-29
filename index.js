@@ -37,11 +37,12 @@ var proxy = function(option){
 			var r = rules[i].r;
 			var d = rules[i].d;
 			// 正则的情况直接返回替换规则
-			if(r instanceof RegExp && r.test(href))
-				return d;
-
-			if(href.indexOf(r) !== -1)
-				return d;
+			if((r instanceof RegExp && r.test(href)) || href.search(r) !== -1){
+				return {
+					target: d,
+					socurce: href.replace(r, '')
+				};
+			}
 		}
 		return false;
 	};
@@ -53,24 +54,23 @@ var proxy = function(option){
 	 */
 	var replaceRule = function(req, res, cb){
 		var href = url.parse(req.url).href;
-        console.log('Path: ' + href);
 		var rules = option.rules;
 		cb(null, regxRules(rules, href), req, res);
 	};
 
-	var middle = function(dest, req, res, cb){
-        console.log('start replace');
-		if(dest){
-			replaceStatic(dest, res, cb);
+	var middle = function(result, req, res, cb){
+		if(result){
+			replaceStatic(result, res, cb);
 			return;
 		}
-		reply(req, res, http, option, cb);
+		reply(req, res, cb);
 	};
 
 
     var end = function(){
 
-    }
+    };
+
 	async.waterfall([start, replaceRule, middle, end]);
 };
 module.exports = proxy;
