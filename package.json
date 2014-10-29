@@ -1,7 +1,7 @@
 {
 	"name": "fe-proxy",
 	"description": "资源文件反向代理",
-	"version": "0.0.3",
+	"version": "0.0.4",
 	"author": "Liu Qing",
 	"repository": {
 		"type": "git",
