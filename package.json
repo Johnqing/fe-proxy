@@ -1,6 +1,6 @@
 {
 	"name": "fe-proxy",
-	"description": "静态资源代理",
+	"description": "资源文件反向代理",
 	"version": "0.0.1",
 	"author": "Liu Qing",
 	"repository": {
